@@ -42,5 +42,5 @@ protocol ViewToPresenterDelegate: class {
 
 // MARK: - To Router
 protocol PresenterToRouterDelegate: class {
-    static func createModule()-> ViewController
+    static func createModule()-> PopularContentViewController
 }

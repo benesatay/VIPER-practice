@@ -8,11 +8,11 @@
 import UIKit
 
 class Router: PresenterToRouterDelegate {
-    static func createModule() -> ViewController {
+    static func createModule() -> PopularContentViewController {
         let presenter: ViewToPresenterDelegate & InteractorToPresenterDelegate = Presenter()
         let interactor: PresenterToInteractorDelegate = Interactor()
         let router: PresenterToRouterDelegate = Router()
-        let view = ViewController()
+        let view = PopularContentViewController()
         view.presenter = presenter
         presenter.view = view
         presenter.router = router

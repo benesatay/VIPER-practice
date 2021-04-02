@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EntityCell: BaseCell {
+class PopularContentCell: BaseCell {
     
     let imageView: UIImageView = {
        let imageView = UIImageView()

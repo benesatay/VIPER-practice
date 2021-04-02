@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class PopularContentViewController: UIViewController {
     
     var presenter: ViewToPresenterDelegate?
     
@@ -100,8 +100,8 @@ class ViewController: UIViewController {
     let headerId = "headerId"
     let entityCellId = "entityCellId"
     private func createUI() {
-        collectionView.register(EntityCell.self, forCellWithReuseIdentifier: entityCellId)
-        collectionView.register(EntityCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(PopularContentCell.self, forCellWithReuseIdentifier: entityCellId)
+        collectionView.register(PopularContentCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.heightAnchor.constraint(equalTo: view.heightAnchor),
@@ -113,7 +113,7 @@ class ViewController: UIViewController {
 }
 
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension PopularContentViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return getItemCount()
@@ -121,7 +121,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: entityCellId, for: indexPath) as!
-            EntityCell
+            PopularContentCell
         
         cell.imageView.image = posterArray?[indexPath.row]
         return cell
@@ -150,7 +150,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! EntityCollectionViewHeader
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! PopularContentCollectionViewHeader
         headerView.segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         return headerView
     }
@@ -164,7 +164,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
 }
 
-extension ViewController: PresenterToViewDelegate {
+extension PopularContentViewController: PresenterToViewDelegate {
     func onPopularContentResponseSuccess(results: [Result]) {
         posterArray = [UIImage]()
         let utilities = Utilities()

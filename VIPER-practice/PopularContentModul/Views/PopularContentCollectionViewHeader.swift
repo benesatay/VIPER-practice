@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EntityCollectionViewHeader: BaseReusableView {
+class PopularContentCollectionViewHeader: BaseReusableView {
 
     var segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()

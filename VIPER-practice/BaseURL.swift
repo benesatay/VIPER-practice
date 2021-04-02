@@ -5,4 +5,10 @@
 //  Created by Bahadır Enes Atay on 2.04.2021.
 //
 
-import Foundation
+
+let imageBaseUrl = "https://image.tmdb.org/t/p/w500"
+let baseUrl = "https://api.themoviedb.org/3"
+
+class BaseUrls {
+    static let shared = BaseUrls()
+}
