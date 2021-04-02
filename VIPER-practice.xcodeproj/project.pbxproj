@@ -11,6 +11,7 @@
 		AB27BC642617B72700206678 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB27BC632617B72700206678 /* SceneDelegate.swift */; };
 		AB27BC6B2617B72700206678 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB27BC6A2617B72700206678 /* Assets.xcassets */; };
 		AB27BC6E2617B72700206678 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB27BC6C2617B72700206678 /* LaunchScreen.storyboard */; };
+		AB6B16372617C092003EAEB5 /* Extensions + UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6B16362617C092003EAEB5 /* Extensions + UIView.swift */; };
 		ABDA448C2617B81200B6459E /* BaseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDA448B2617B81200B6459E /* BaseURL.swift */; };
 		ABDA448F2617B83F00B6459E /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDA448E2617B83F00B6459E /* BaseCell.swift */; };
 		ABDA44922617B84700B6459E /* BaseReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDA44912617B84700B6459E /* BaseReusableView.swift */; };
@@ -37,6 +38,7 @@
 		AB27BC6A2617B72700206678 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB27BC6D2617B72700206678 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB27BC6F2617B72700206678 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB6B16362617C092003EAEB5 /* Extensions + UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions + UIView.swift"; sourceTree = "<group>"; };
 		ABDA448B2617B81200B6459E /* BaseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseURL.swift; sourceTree = "<group>"; };
 		ABDA448E2617B83F00B6459E /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		ABDA44912617B84700B6459E /* BaseReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReusableView.swift; sourceTree = "<group>"; };
@@ -88,14 +90,14 @@
 			children = (
 				AB27BC612617B72700206678 /* AppDelegate.swift */,
 				AB27BC632617B72700206678 /* SceneDelegate.swift */,
-				AB27BC6A2617B72700206678 /* Assets.xcassets */,
-				AB27BC6C2617B72700206678 /* LaunchScreen.storyboard */,
-				AB27BC6F2617B72700206678 /* Info.plist */,
 				ABDA44CF2617BA6700B6459E /* Utilities.swift */,
 				ABDA448B2617B81200B6459E /* BaseURL.swift */,
 				ABDA44942617B84B00B6459E /* CustomBaseViews */,
 				ABDA449C2617B88500B6459E /* Extensions */,
 				ABDA44CD2617BA4C00B6459E /* PopularContentModul */,
+				AB27BC6A2617B72700206678 /* Assets.xcassets */,
+				AB27BC6C2617B72700206678 /* LaunchScreen.storyboard */,
+				AB27BC6F2617B72700206678 /* Info.plist */,
 			);
 			path = "VIPER-practice";
 			sourceTree = "<group>";
@@ -114,6 +116,7 @@
 			children = (
 				ABDA44962617B87900B6459E /* Extensions + UIActivityIndicatorView.swift */,
 				ABDA44992617B88200B6459E /* Extensions + UIStackView.swift */,
+				AB6B16362617C092003EAEB5 /* Extensions + UIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -171,9 +174,9 @@
 		ABDA44CB2617BA3C00B6459E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				ABDA44C82617BA2D00B6459E /* PopularContentViewController.swift */,
 				ABDA44C22617B9F400B6459E /* PopularContentCell.swift */,
 				ABDA44C52617BA1700B6459E /* PopularContentCollectionViewHeader.swift */,
-				ABDA44C82617BA2D00B6459E /* PopularContentViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -181,13 +184,13 @@
 		ABDA44CD2617BA4C00B6459E /* PopularContentModul */ = {
 			isa = PBXGroup;
 			children = (
-				ABDA44A12617B8B300B6459E /* Endpoints */,
-				ABDA44AC2617B95F00B6459E /* Entities */,
+				ABDA44BB2617B9A900B6459E /* Protocols */,
+				ABDA44CB2617BA3C00B6459E /* Views */,
 				ABDA44B12617B97B00B6459E /* Interactor */,
 				ABDA44B62617B99A00B6459E /* Presenter */,
-				ABDA44BB2617B9A900B6459E /* Protocols */,
+				ABDA44AC2617B95F00B6459E /* Entities */,
 				ABDA44C02617B9CE00B6459E /* Router */,
-				ABDA44CB2617BA3C00B6459E /* Views */,
+				ABDA44A12617B8B300B6459E /* Endpoints */,
 			);
 			path = PopularContentModul;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 				ABDA448C2617B81200B6459E /* BaseURL.swift in Sources */,
 				ABDA44B92617B9A600B6459E /* Protocols.swift in Sources */,
 				ABDA44AA2617B92300B6459E /* PopularMovieModel.swift in Sources */,
+				AB6B16372617C092003EAEB5 /* Extensions + UIView.swift in Sources */,
 				ABDA44B42617B98A00B6459E /* Presenter.swift in Sources */,
 				ABDA449F2617B8AD00B6459E /* Endpoints.swift in Sources */,
 				ABDA449A2617B88200B6459E /* Extensions + UIStackView.swift in Sources */,

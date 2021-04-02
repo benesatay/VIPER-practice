@@ -24,6 +24,7 @@ class PopularContentViewController: UIViewController {
     }()
     
     private var posterArray: [UIImage]?
+    private var voteArray: [Double]?
     private var activityIndicator: UIActivityIndicatorView?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +33,6 @@ class PopularContentViewController: UIViewController {
         setNavigationBar()
         createUI()
     }
-    
-
     
     @IBAction func gridTapped(_ sender: UIBarButtonItem) {
         guard presenter != nil else { return }
@@ -112,7 +111,6 @@ class PopularContentViewController: UIViewController {
     }
 }
 
-
 extension PopularContentViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -124,6 +122,11 @@ extension PopularContentViewController: UICollectionViewDataSource, UICollection
             PopularContentCell
         
         cell.imageView.image = posterArray?[indexPath.row]
+        if voteArray != nil {
+            let vote: String = String(describing: voteArray![indexPath.row])
+            cell.voteLabel.text = vote
+        }
+        
         return cell
     }
     
@@ -167,24 +170,31 @@ extension PopularContentViewController: UICollectionViewDataSource, UICollection
 extension PopularContentViewController: PresenterToViewDelegate {
     func onPopularContentResponseSuccess(results: [Result]) {
         posterArray = [UIImage]()
+        voteArray = [Double]()
         let utilities = Utilities()
         DispatchQueue.main.async {
             self.activityIndicator?.showActivityIndicator(superView: self.view)
         }
         for result in results {
-            guard let posterPath = result.posterPath else { activityIndicator?.hideActivityIndicator()
-                return }
-            let urlString = imageBaseUrl.appending(posterPath)
-            utilities.getImage(from: URL(string: urlString)!) { (image, error) in
-                guard let poster = image, error == nil else { self.activityIndicator?.hideActivityIndicator()
-                    return }
-                self.posterArray?.append(poster)
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                    self.setNavigationTitle()
-                    self.activityIndicator?.hideActivityIndicator()
+            if let posterPath = result.posterPath {
+                let urlString = imageBaseUrl.appending(posterPath)
+                utilities.getImage(from: URL(string: urlString)!) { (image, error) in
+                    guard let poster = image, error == nil else { self.activityIndicator?.hideActivityIndicator()
+                        return }
+                    self.posterArray?.append(poster)
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                        self.setNavigationTitle()
+                        self.activityIndicator?.hideActivityIndicator()
+                    }
                 }
             }
+            
+            if let vote = result.voteAverage {
+                voteArray?.append(vote)
+            }
+       
+        
             
         }
     }
