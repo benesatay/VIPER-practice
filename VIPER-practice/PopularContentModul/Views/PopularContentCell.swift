@@ -21,7 +21,7 @@ class PopularContentCell: BaseCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor.white.withAlphaComponent(1)
+        label.textColor = UIColor.white
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -31,7 +31,7 @@ class PopularContentCell: BaseCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor.white.withAlphaComponent(0.9)
+        label.textColor = UIColor.white.withAlphaComponent(0.6)
         label.textAlignment = .left
         return label
     }()
@@ -40,7 +40,7 @@ class PopularContentCell: BaseCell {
         let label = UILabel()
         label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = UIColor.white.withAlphaComponent(0.9)
+        label.textColor = UIColor.white.withAlphaComponent(0.6)
         label.textAlignment = .left
         return label
     }()
@@ -49,7 +49,7 @@ class PopularContentCell: BaseCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "star.fill")
         imageView.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        imageView.tintColor = UIColor.white.withAlphaComponent(0.9)
+        imageView.tintColor = UIColor.white.withAlphaComponent(0.6)
         return imageView
     }()
     
@@ -57,14 +57,13 @@ class PopularContentCell: BaseCell {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.fill")
         imageView.widthAnchor.constraint(equalToConstant: 16).isActive = true
-        imageView.tintColor = UIColor.white.withAlphaComponent(0.9)
+        imageView.tintColor = UIColor.white.withAlphaComponent(0.6)
         return imageView
     }()
     
     override func setupViews() {
         setAppearence()
         setupImageView()
-        setupVoteStack()
     }
     
     private func setAppearence() {
@@ -75,6 +74,8 @@ class PopularContentCell: BaseCell {
     private func setupImageView() {
         posterImageView.frame = self.bounds
         self.addSubview(posterImageView)
+        setNameLabel()
+        setupVoteStack()
     }
     
     private func setupVoteStack() {
@@ -88,7 +89,6 @@ class PopularContentCell: BaseCell {
         let voteCountStack = UIStackView()
         voteCountStack.setCustomStackView(arrangedSubviewArray: [voteCountImageView, voteCountLabel], axis: .horizontal, spacing: 5, topSpace: 0, leftSpace: 0, bottomSpace: 0, rightSpace: 0)
         
-        
         stackView.setCustomStackView(arrangedSubviewArray: [voteCountStack, voteStack], axis: .horizontal, spacing: 0, topSpace: 12, leftSpace: 10, bottomSpace: 12, rightSpace: 10)
         self.posterImageView.addSubview(stackView)
         NSLayoutConstraint.activate([
@@ -96,21 +96,18 @@ class PopularContentCell: BaseCell {
             stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             stackView.widthAnchor.constraint(equalTo: self.widthAnchor)
         ])
-        setNameLabel()
     }
     
     private func setNameLabel() {
         let backgroundView = setBackgroundView(maskedCorners: [.layerMaxXMinYCorner, .layerMinXMinYCorner])
-        nameLabel.insertSubview(backgroundView, at: 0)
-        nameLabel.sendSubviewToBack(backgroundView)
-        self.posterImageView.addSubview(nameLabel)
+        self.posterImageView.addSubview(backgroundView)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.addSubview(nameLabel)
         NSLayoutConstraint.activate([
             nameLabel.heightAnchor.constraint(equalToConstant: 40),
             nameLabel.topAnchor.constraint(equalTo: self.topAnchor),
             nameLabel.widthAnchor.constraint(equalTo: self.widthAnchor)
         ])
-        
     }
     
     private func setBackgroundView(maskedCorners: CACornerMask) -> UIView {
@@ -121,11 +118,9 @@ class PopularContentCell: BaseCell {
         let backgroundView = UIView(frame: viewFrame)
         backgroundView.backgroundColor = .clear
         backgroundView.addBlurEffect(viewFrame: backgroundView.bounds, cornerRadius: 20)
-        backgroundView.alpha = 0.4
+        backgroundView.alpha = 0.5
         let blurView = backgroundView.subviews[0] as! UIVisualEffectView
         blurView.layer.maskedCorners = maskedCorners
         return backgroundView
     }
-    
- 
 }
