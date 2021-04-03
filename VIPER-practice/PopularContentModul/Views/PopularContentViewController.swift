@@ -23,8 +23,8 @@ class PopularContentViewController: UIViewController {
         return collectionView
     }()
     
-    private var posterArray: [UIImage]?
-    private var voteArray: [Double]?
+    private var contentResults: [Result]!
+    private var itemCount: Int!
     private var activityIndicator: UIActivityIndicatorView?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,17 +36,13 @@ class PopularContentViewController: UIViewController {
     
     @IBAction func gridTapped(_ sender: UIBarButtonItem) {
         guard presenter != nil else { return }
-        let actionSheet = presenter!.createActionSheet(didSelected: {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-            self.setNavigationTitle()
-        })
+        let actionSheet = presenter!.createActionSheet()
         self.present(actionSheet, animated: true, completion: nil)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         activityIndicator?.showActivityIndicator(superView: self.view)
+        contentResults = nil
         let index = sender.selectedSegmentIndex
         presenter?.currentSegment(index: index)
         setNavigationTitle()
@@ -54,14 +50,6 @@ class PopularContentViewController: UIViewController {
     }
 
     private func setNavigationBar() {
-        ///left bar button image
-        var image: UIImage!
-        if #available(iOS 13.0, *) {
-            image = UIImage(systemName: "rectangle.grid.2x2.fill")
-        } else {}
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(gridTapped(_:)))
-        
         let tintColor = UIColor(red: 232/255, green: 92/255, blue: 74/255, alpha: 1)
         self.navigationController?.navigationBar
             .tintColor = tintColor
@@ -73,6 +61,10 @@ class PopularContentViewController: UIViewController {
             .shadowImage = UIImage()
         self.navigationController?.navigationBar
             .isTranslucent = false
+        ///right bar item
+        let image = UIImage(systemName: "rectangle.grid.2x2.fill")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: image, style: .plain, target: self, action: #selector(gridTapped(_:)))
         ///set navigation bar layer
         self.navigationController?.navigationBar.layer
             .masksToBounds = false
@@ -92,12 +84,12 @@ class PopularContentViewController: UIViewController {
     }
     
     private func setNavigationTitle() {
-        let itemCount = self.getItemCount()
-        self.navigationItem.title = "\(itemCount)" + " " + "Items"
+        guard itemCount != nil else { return }
+        self.navigationItem.title = "\(itemCount!)" + " " + "Items"
     }
     
-    let headerId = "headerId"
-    let entityCellId = "entityCellId"
+    private let headerId = "headerId"
+    private let entityCellId = "entityCellId"
     private func createUI() {
         collectionView.register(PopularContentCell.self, forCellWithReuseIdentifier: entityCellId)
         collectionView.register(PopularContentCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
@@ -114,17 +106,42 @@ class PopularContentViewController: UIViewController {
 extension PopularContentViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return getItemCount()
+        return itemCount == nil ? 0 : itemCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: entityCellId, for: indexPath) as!
             PopularContentCell
+        guard contentResults != nil else { return cell }
+        let result = contentResults[indexPath.row]
+        if let posterPath = result.posterPath {
+            let urlString = imageBaseUrl.appending(posterPath)
+            let utilities = Utilities()
+            utilities.getImage(from: URL(string: urlString)!) { (image, error) in
+                guard let poster = image, error == nil else {
+                    self.activityIndicator?.hideActivityIndicator()
+                    return }
+                DispatchQueue.main.async {
+                    cell.posterImageView.image = poster
+                }
+            }
+        } else {
+            cell.posterImageView.image = nil
+        }
         
-        cell.imageView.image = posterArray?[indexPath.row]
-        if voteArray != nil {
-            let vote: String = String(describing: voteArray![indexPath.row])
-            cell.voteLabel.text = vote
+        if let name = result.name {
+            cell.nameLabel.text = name
+        } else {
+            cell.nameLabel.text = ""
+        }
+        
+        if let vote = result.voteAverage,
+           let voteCount = result.voteCount {
+            cell.voteLabel.text = "\(vote)"
+            cell.voteCountLabel.text = "\(voteCount)"
+        } else {
+            cell.voteLabel.text = ""
+            cell.voteCountLabel.text = ""
         }
         
         return cell
@@ -168,52 +185,23 @@ extension PopularContentViewController: UICollectionViewDataSource, UICollection
 }
 
 extension PopularContentViewController: PresenterToViewDelegate {
-    func onPopularContentResponseSuccess(results: [Result]) {
-        posterArray = [UIImage]()
-        voteArray = [Double]()
-        let utilities = Utilities()
+    func getItemCount(count: Int) {
+       itemCount = count
         DispatchQueue.main.async {
-            self.activityIndicator?.showActivityIndicator(superView: self.view)
+            self.collectionView.reloadData()
+            self.setNavigationTitle()
         }
-        for result in results {
-            if let posterPath = result.posterPath {
-                let urlString = imageBaseUrl.appending(posterPath)
-                utilities.getImage(from: URL(string: urlString)!) { (image, error) in
-                    guard let poster = image, error == nil else { self.activityIndicator?.hideActivityIndicator()
-                        return }
-                    self.posterArray?.append(poster)
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                        self.setNavigationTitle()
-                        self.activityIndicator?.hideActivityIndicator()
-                    }
-                }
-            }
-            
-            if let vote = result.voteAverage {
-                voteArray?.append(vote)
-            }
-       
-        
-            
+    }
+    
+    func onPopularContentResponseSuccess(results: [Result]) {
+        contentResults = results
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            self.setNavigationTitle()
         }
     }
     
     func onPopularContentResponseFailed(error: String) {
         print("error")
-    }
-    
-    
-    func getItemCount() -> Int {
-        if presenter?.selectedCount != nil {
-            return (presenter?.selectedCount)!
-        } else {
-            guard posterArray != nil else { return 0 }
-            if posterArray!.count > 4 {
-                return 4
-            } else {
-                return posterArray!.count
-            }
-        }
     }
 }

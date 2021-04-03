@@ -22,7 +22,7 @@ protocol PresenterToInteractorDelegate :class {
 
 // MARK: - To View
 protocol PresenterToViewDelegate:class {
-    func getItemCount() -> Int
+    func getItemCount(count: Int)
     func onPopularContentResponseSuccess(results: [Result])
     func onPopularContentResponseFailed(error:String)
 }
@@ -36,7 +36,7 @@ protocol ViewToPresenterDelegate: class {
     var selectedCount: Int? { get set }
     func startTofetchPopularTVContent()
     func startTofetchPopularMovieContent()
-    func createActionSheet(didSelected: @escaping () -> Void) -> UIAlertController
+    func createActionSheet() -> UIAlertController
     func currentSegment(index: Int)
 }
 

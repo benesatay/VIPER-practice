@@ -24,13 +24,12 @@ class Presenter: ViewToPresenterDelegate {
     func startTofetchPopularMovieContent() {
         interactor?.fetchPopularMovieContent()
     }
-    
-    
 }
 
 extension Presenter: InteractorToPresenterDelegate {
     func fetchingSucceed(results: [Result]) {
         view?.onPopularContentResponseSuccess(results: results)
+        view?.getItemCount(count: results.count)
     }
     
     func fetchingFailed() {
@@ -39,24 +38,26 @@ extension Presenter: InteractorToPresenterDelegate {
 }
 
 extension Presenter {
-    func createActionSheet(didSelected: @escaping () -> Void) -> UIAlertController {
+    func createActionSheet() -> UIAlertController {
         ///actions of sheet
         let textColor = UIColor(red: 15/255, green: 155/255, blue: 15/255, alpha: 1)
         let fiveItemButton = UIAlertAction(title: "5", style: .default) { (UIAlertAction) in
             self.selectedCount = 5
-           didSelected()
+            self.view?.getItemCount(count: self.selectedCount!)
         }
         fiveItemButton.setValue(textColor, forKey: "titleTextColor")
 
         let tenItemButton = UIAlertAction(title: "10", style: .default) { (UIAlertAction) in
             self.selectedCount = 10
-            didSelected()
+            self.view?.getItemCount(count: self.selectedCount!)
+
         }
         tenItemButton.setValue(textColor, forKey: "titleTextColor")
 
         let twentyItemButton = UIAlertAction(title: "20", style: .default) { (UIAlertAction) in
             self.selectedCount = 20
-            didSelected()
+            self.view?.getItemCount(count: self.selectedCount!)
+
         }
         twentyItemButton.setValue(textColor, forKey: "titleTextColor")
 
